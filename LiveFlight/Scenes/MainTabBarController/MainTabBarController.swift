@@ -20,48 +20,39 @@ class MainTabBarController: UITabBarController {
         let homeVC = HomeScreenViewController()
         let favoritesVC = FavoritesViewController()
         let settingsVC = SettingsViewController()
-        // Sembol ve renk ayarları
-        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
-        favoritesVC.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart.fill"), tag: 1)
-        settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear.fill"), tag: 2)
+        
+        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        favoritesVC.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart"), selectedImage: UIImage(systemName: "heart.fill"))
+        settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gear"), selectedImage: UIImage(systemName: "gear.fill"))
         
         let homeNav = UINavigationController(rootViewController: homeVC)
         let favoritesNav = UINavigationController(rootViewController: favoritesVC)
         let settingsNav = UINavigationController(rootViewController: settingsVC)
         
-        
-        // Seçili tab'ı belirginleştirmek için ikonları değiştiriyoruz
-        let selectedHomeIcon = UIImage(systemName: "house.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        let unselectedHomeIcon = UIImage(systemName: "house")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        
-        let selectedFavoritesIcon = UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        let unselectedFavoritesIcon = UIImage(systemName: "heart")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        
-        let selectedSettingsIcon = UIImage(systemName: "gear.fill")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        let unselectedSettingsIcon = UIImage(systemName: "gear")?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
-        
-        homeVC.tabBarItem.selectedImage = selectedHomeIcon
-        homeVC.tabBarItem.image = unselectedHomeIcon
-        
-        favoritesVC.tabBarItem.selectedImage = selectedFavoritesIcon
-        favoritesVC.tabBarItem.image = unselectedFavoritesIcon
-        
-        settingsVC.tabBarItem.selectedImage = selectedSettingsIcon
-        settingsVC.tabBarItem.image = unselectedSettingsIcon
-        
         viewControllers = [homeNav, favoritesNav, settingsNav]
+        
+        updateAppearance() // İlk yükleme sırasında güncelleme
     }
     
     private func updateAppearance() {
         if traitCollection.userInterfaceStyle == .dark {
             tabBar.backgroundColor = .black
             tabBar.tintColor = .white
-            tabBar.unselectedItemTintColor = .lightGray
+            tabBar.unselectedItemTintColor = .white
+            
+            for item in tabBar.items ?? [] {
+                item.image = item.image?.withRenderingMode(.alwaysOriginal).withTintColor(.white)
+                item.selectedImage = item.selectedImage?.withRenderingMode(.alwaysOriginal).withTintColor(.white)
+            }
         } else {
             tabBar.backgroundColor = .white
             tabBar.tintColor = .blue
-            tabBar.unselectedItemTintColor = .gray
+            tabBar.unselectedItemTintColor = .blue
+            
+            for item in tabBar.items ?? [] {
+                item.image = item.image?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
+                item.selectedImage = item.selectedImage?.withRenderingMode(.alwaysOriginal).withTintColor(.blue.withAlphaComponent(0.6))
+            }
         }
     }
 }
-
