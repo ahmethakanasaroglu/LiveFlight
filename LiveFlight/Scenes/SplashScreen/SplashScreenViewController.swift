@@ -25,6 +25,8 @@ class SplashScreenViewController: UIViewController, UIPageViewControllerDataSour
         button.layer.cornerRadius = 10
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+        
+        
         return button
     }()
     

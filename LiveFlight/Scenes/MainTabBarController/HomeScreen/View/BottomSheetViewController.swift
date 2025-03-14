@@ -1,10 +1,3 @@
-//
-//  BottomSheetViewController.swift
-//  LiveFlight
-//
-//  Created by Ahmet Hakan Asaroğlu on 14.03.2025.
-//
-
 import UIKit
 import PanModal
 
@@ -189,7 +182,7 @@ class BottomSheetViewController: UIViewController, PanModalPresentable {
     }
     
     var shortFormHeight: PanModalHeight {
-        return .contentHeight(420)
+        return .contentHeight(450)
     }
     
     var longFormHeight: PanModalHeight {
