@@ -2,7 +2,7 @@ import Foundation
 
 final class SplashScreenViewModel {
     
-    let animations = ["Animation - 1739971059873", "Animation - 1739971095243", "Animation - 1739967059887"]
+    let animations = ["Animation - 1741590573984", "Animation - 1739971095243", "Animation - 1739967059887"]
     
     enum SplashSeen: Int {
         case seen = 1
