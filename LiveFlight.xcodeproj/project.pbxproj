@@ -33,7 +33,7 @@
 		0DC45F1C2D84624000F5B09A /* Exceptions for "LiveFlight" folder in "LiveFlight" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 0DC45EF02D84623F00F5B09A /* LiveFlight */;
 		};
