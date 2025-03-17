@@ -14,7 +14,7 @@ protocol MapKitManagerDelegate: AnyObject {
 }
 
 class MapKitManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
-    static let shared = MapKitManager()
+    static var shared = MapKitManager()
     
     var locationManager: CLLocationManager?
     weak var delegate: MapKitManagerDelegate?

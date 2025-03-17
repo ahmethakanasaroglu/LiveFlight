@@ -15,7 +15,7 @@ class HomeScreenViewModel: MapKitManagerDelegate {
     
     var onInternetStatusChanged: ((Bool, String) -> Void)?
     
-    private var timer: Timer?
+    var timer: Timer?
 
     init() {
         MapKitManager.shared.delegate = self
