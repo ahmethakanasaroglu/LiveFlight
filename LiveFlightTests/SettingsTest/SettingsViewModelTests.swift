@@ -1,35 +1,61 @@
-//
-//  SettingsViewModelTests.swift
-//  LiveFlightTests
-//
-//  Created by Ahmet Hakan Asaroğlu on 18.03.2025.
-//
-
 import XCTest
+@testable import LiveFlight
 
-final class SettingsViewModelTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+class SettingsViewModelTests: XCTestCase {
+    
+    var viewModel: SettingsViewModel!
+    
+    override func setUp() {
+        super.setUp()
+        viewModel = SettingsViewModel()
+        UserDefaults.standard.removeObject(forKey: "selectedTheme") // Her testte temiz başlamak için
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    override func tearDown() {
+        viewModel = nil
+        super.tearDown()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    // 1️⃣ TEMANIN DOĞRU KAYDEDİLDİĞİNİ TEST ET
+    func testToggleTheme_SavesThemePreference() {
+        viewModel.toggleTheme(isOn: true)
+        XCTAssertTrue(UserDefaults.standard.bool(forKey: "selectedTheme"), "Dark mode açık olmalı")
+        // iki iş yapıyor bu fonksiyon. hem userDefaultsa kaydediyor hem de darkMode ayarı yapıyor ama bu UI işlemi oldugu için test edemeyiz sadece kaydetmeyi test ediyoruz. Mesela bu yüzden applyTheme için test yazamıyoruz burda cünkü sadece ui işlemi var.
+        viewModel.toggleTheme(isOn: false)
+        XCTAssertFalse(UserDefaults.standard.bool(forKey: "selectedTheme"), "Dark mode kapalı olmalı")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    // 2️⃣ TEMANIN DOĞRU DÖNÜP DÖNMEDİĞİNİ TEST ET
+    func testIsDarkMode_ReturnsCorrectValue() {
+        UserDefaults.standard.set(true, forKey: "selectedTheme")
+        XCTAssertTrue(viewModel.isDarkMode, "Dark mode açık olmalı")
+        
+        UserDefaults.standard.set(false, forKey: "selectedTheme")
+        XCTAssertFalse(viewModel.isDarkMode, "Dark mode kapalı olmalı")
+    }
+    
+    // 3️⃣ AYARLAR LİSTESİNİN DOĞRU OLUP OLMADIĞINI TEST ET
+    func testGetSettingsOptions_ReturnsCorrectOptions() {
+        let options = viewModel.getSettingsOptions()
+        XCTAssertEqual(options.count, 4, "Ayarlar listesi 4 eleman içermeli")
+        
+        XCTAssertEqual(options[0].title, "Kişisel Verilerin Korunması")
+        XCTAssertEqual(options[1].title, "Görüş & Yorumlar")
+        XCTAssertEqual(options[2].title, "Destek")
+        XCTAssertEqual(options[3].title, "Uygulama Hakkında")
+    }
+    
+    // URL açılabiliyor mu testi
+    func testOpenURL_ValidURL() {
+        let validURL = "https://opensky-network.org/api/states/all" // Gerçek bir URL
+        
+        let url = URL(string: validURL)
+        XCTAssertNotNil(url, "URL düzgün oluşturulmalı")
+        
+        let canOpen = UIApplication.shared.canOpenURL(url!)
+        XCTAssertTrue(canOpen, "Uygulama bu URL'yi açabilmeli")
+        
+        // Gerçekten açmak istemiyoruz, sadece açılabilir mi kontrol ediyoruz.
     }
 
 }
