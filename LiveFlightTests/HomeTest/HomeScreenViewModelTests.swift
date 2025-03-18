@@ -49,16 +49,21 @@ class HomeScreenViewModelTests: XCTestCase {
     func testFetchFlightData_Success() {
         let expectation = self.expectation(description: "API verisi başarıyla alındı")
         
+        var fulfilled = false  // Bir kere çağrıldığını kontrol etmek için flag
+        
         viewModel.flightData = { data in
+            guard !fulfilled else { return } // Eğer zaten çağrıldıysa tekrar çağırma
+            fulfilled = true
+            
             XCTAssertNotNil(data, "Veri nil olmamalı")
-            expectation.fulfill()  // API'den veri başarıyla gelirse test tamamlanır
+            expectation.fulfill()
         }
         
         viewModel.fetchFlightData()
         
-        waitForExpectations(timeout: 20.0, handler: nil) // testin bekleme saniyesi
-        // ŞU AN SİTE ERROR VERİYOR SONRA DENİCEM BİR DAHA, TEST DOGRU OLMALI
+        waitForExpectations(timeout: 20.0, handler: nil)
     }
+
     
     func testStopUpdatingFlightData() {
         viewModel.stopUpdatingFlightData()
