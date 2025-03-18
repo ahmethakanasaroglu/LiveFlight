@@ -9,12 +9,12 @@ import UIKit
 
 class FavoriteFlightCell: UITableViewCell {
     
-    private let cardView = UIView()
-    private let flightLabel = UILabel()
-    private let flightIcon = UIImageView()
-    private let icao24Label = UILabel()
-    private let latitudeLabel = UILabel()
-    private let longitudeLabel = UILabel()
+    let cardView = UIView()
+    let flightLabel = UILabel()
+    let flightIcon = UIImageView()
+    let icao24Label = UILabel()
+    let latitudeLabel = UILabel()
+    let longitudeLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
