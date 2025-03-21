@@ -14,7 +14,7 @@ class NetworkMonitor {
     
     var connectionStatusChanged: ((Bool) -> Void)?
     
-    private init() {
+     init() {
         monitor.pathUpdateHandler = { [weak self] path in  // weak self kullanma sebebimiz NetworkManager nesnesinin retain cycle olusturmamasıdır. (bellek sızıntısı)
             self?.isConnected = path.status == .satisfied  // baglantı varsa satisfied olur, yoksa unsatisfied
         }
