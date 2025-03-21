@@ -1,130 +1,114 @@
 import XCTest
-@testable import LiveFlight
+@testable import LiveFlight  // Test edilen modülü içe aktar
 
 class FlightModelTests: XCTestCase {
-    
-    func testStateInitialization() {
-        // Arrange
+
+    /// FlightModel'in manuel init ile doğru oluşturulduğunu test eder
+    func testFlightModelInitialization() {
         let state = State(
-            icao24: "ABC123",
-            callSign: "ABC123",
-            originCountry: "USA",
-            timePosition: 123456789,
-            lastContact: 987654321,
-            longitude: -122.4194,
-            latitude: 37.7749,
-            baroAltitude: 500.0,
+            icao24: "abc123",
+            callSign: "THY123",
+            originCountry: "Turkey",
+            timePosition: 1616161616,
+            lastContact: 1616161617,
+            longitude: 28.9784,
+            latitude: 41.0082,
+            baroAltitude: 10000.0,
             onGround: false,
             velocity: 250.0,
             trueTrack: 180.0,
-            verticalRate: 0.5,
-            sensors: [1, 2],
-            geoAltitude: 1000.0,
-            squawk: "1234",
+            verticalRate: 500.0,
+            sensors: [1, 2, 3],
+            geoAltitude: 9800.0,
+            squawk: "7500",
             spi: true,
             positionSource: 1
         )
         
-        // Assert
-        XCTAssertEqual(state.icao24, "ABC123", "ICAO24 doğru olmalı")
-        XCTAssertEqual(state.callSign, "ABC123", "CallSign doğru olmalı")
-        XCTAssertEqual(state.originCountry, "USA", "OriginCountry doğru olmalı")
-        XCTAssertEqual(state.latitude, 37.7749, "Latitude doğru olmalı")
-        XCTAssertEqual(state.longitude, -122.4194, "Longitude doğru olmalı")
-        XCTAssertEqual(state.baroAltitude, 500.0, "BaroAltitude doğru olmalı")
-        XCTAssertEqual(state.onGround, false, "OnGround doğru olmalı")
-        XCTAssertEqual(state.velocity, 250.0, "Velocity doğru olmalı")
-        XCTAssertEqual(state.trueTrack, 180.0, "TrueTrack doğru olmalı")
-        XCTAssertEqual(state.verticalRate, 0.5, "VerticalRate doğru olmalı")
-        XCTAssertEqual(state.sensors, [1, 2], "Sensors doğru olmalı")
-        XCTAssertEqual(state.geoAltitude, 1000.0, "GeoAltitude doğru olmalı")
-        XCTAssertEqual(state.squawk, "1234", "Squawk doğru olmalı")
-        XCTAssertEqual(state.spi, true, "SPI doğru olmalı")
-        XCTAssertEqual(state.positionSource, 1, "PositionSource doğru olmalı")
+        let flightModel = FlightModel(time: 1616161616, states: [state])
+        
+        XCTAssertEqual(flightModel.time, 1616161616)
+        XCTAssertEqual(flightModel.states?.count, 1)
+        XCTAssertEqual(flightModel.states?.first?.icao24, "abc123")
+        XCTAssertEqual(flightModel.states?.first?.callSign, "THY123")
+        XCTAssertEqual(flightModel.states?.first?.originCountry, "Turkey")
+        XCTAssertEqual(flightModel.states?.first?.longitude, 28.9784)
+        XCTAssertEqual(flightModel.states?.first?.latitude, 41.0082)
+        XCTAssertEqual(flightModel.states?.first?.baroAltitude, 10000.0)
+        XCTAssertEqual(flightModel.states?.first?.onGround, false)
     }
-    
-    func testStateDecode() throws {
-        // Arrange: JSON verisi (örnek)
+
+    /// JSON verisinin doğru şekilde `FlightModel` nesnesine dönüştüğünü test eder
+    func testFlightModelDecoding() throws {
         let jsonData = """
         {
-            "icao24": "ABC123",
-            "callSign": "ABC123",
-            "originCountry": "USA",
-            "timePosition": 123456789,
-            "lastContact": 987654321,
-            "longitude": -122.4194,
-            "latitude": 37.7749,
-            "baroAltitude": 500.0,
-            "onGround": false,
-            "velocity": 250.0,
-            "trueTrack": 180.0,
-            "verticalRate": 0.5,
-            "sensors": [1, 2],
-            "geoAltitude": 1000.0,
-            "squawk": "1234",
-            "spi": true,
-            "positionSource": 1
-        }
-        """.data(using: .utf8)!
-        
-        // Act: JSON verisini decode et
-        let decoder = JSONDecoder()
-        let decodedState = try decoder.decode(State.self, from: jsonData)
-        
-        // Assert: Decode edilen verinin doğruluğunu kontrol et
-        XCTAssertEqual(decodedState.icao24, "ABC123", "ICAO24 doğru olmalı")
-        XCTAssertEqual(decodedState.callSign, "ABC123", "CallSign doğru olmalı")
-        XCTAssertEqual(decodedState.originCountry, "USA", "OriginCountry doğru olmalı")
-        XCTAssertEqual(decodedState.latitude, 37.7749, "Latitude doğru olmalı")
-        XCTAssertEqual(decodedState.longitude, -122.4194, "Longitude doğru olmalı")
-        XCTAssertEqual(decodedState.baroAltitude, 500.0, "BaroAltitude doğru olmalı")
-        XCTAssertEqual(decodedState.onGround, false, "OnGround doğru olmalı")
-        XCTAssertEqual(decodedState.velocity, 250.0, "Velocity doğru olmalı")
-        XCTAssertEqual(decodedState.trueTrack, 180.0, "TrueTrack doğru olmalı")
-        XCTAssertEqual(decodedState.verticalRate, 0.5, "VerticalRate doğru olmalı")
-        XCTAssertEqual(decodedState.sensors, [1, 2], "Sensors doğru olmalı")
-        XCTAssertEqual(decodedState.geoAltitude, 1000.0, "GeoAltitude doğru olmalı")
-        XCTAssertEqual(decodedState.squawk, "1234", "Squawk doğru olmalı")
-        XCTAssertEqual(decodedState.spi, true, "SPI doğru olmalı")
-        XCTAssertEqual(decodedState.positionSource, 1, "PositionSource doğru olmalı")
-    }
-    
-    func testFlightModelDecode() throws {
-        // Arrange: JSON verisi (örnek)
-        let jsonData = """
-        {
-            "time": 1609459200,
+            "time": 1616161616,
             "states": [
-                {
-                    "icao24": "ABC123",
-                    "callSign": "ABC123",
-                    "originCountry": "USA",
-                    "timePosition": 123456789,
-                    "lastContact": 987654321,
-                    "longitude": -122.4194,
-                    "latitude": 37.7749,
-                    "baroAltitude": 500.0,
-                    "onGround": false,
-                    "velocity": 250.0,
-                    "trueTrack": 180.0,
-                    "verticalRate": 0.5,
-                    "sensors": [1, 2],
-                    "geoAltitude": 1000.0,
-                    "squawk": "1234",
-                    "spi": true,
-                    "positionSource": 1
-                }
+                [
+                    "abc123",
+                    "THY123",
+                    "Turkey",
+                    1616161616,
+                    1616161617,
+                    28.9784,
+                    41.0082,
+                    10000.0,
+                    false,
+                    250.0,
+                    180.0,
+                    500.0,
+                    [1, 2, 3],
+                    9800.0,
+                    "7500",
+                    true,
+                    1
+                ]
             ]
         }
         """.data(using: .utf8)!
         
-        // Act: JSON verisini decode et
         let decoder = JSONDecoder()
-        let decodedFlightModel = try decoder.decode(FlightModel.self, from: jsonData)
+        let flightModel = try decoder.decode(FlightModel.self, from: jsonData)
+
+        XCTAssertEqual(flightModel.time, 1616161616)
+        XCTAssertEqual(flightModel.states?.count, 1)
+        XCTAssertEqual(flightModel.states?.first?.icao24, "abc123")
+        XCTAssertEqual(flightModel.states?.first?.callSign, "THY123")
+        XCTAssertEqual(flightModel.states?.first?.originCountry, "Turkey")
+    }
+
+    /// `FlightModel` nesnesinin JSON olarak doğru encode edildiğini test eder
+    func testFlightModelEncoding() throws {
+        let state = State(
+            icao24: "abc123",
+            callSign: "THY123",
+            originCountry: "Turkey",
+            timePosition: 1616161616,
+            lastContact: 1616161617,
+            longitude: 28.9784,
+            latitude: 41.0082,
+            baroAltitude: 10000.0,
+            onGround: false,
+            velocity: 250.0,
+            trueTrack: 180.0,
+            verticalRate: 500.0,
+            sensors: [1, 2, 3],
+            geoAltitude: 9800.0,
+            squawk: "7500",
+            spi: true,
+            positionSource: 1
+        )
         
-        // Assert: Decode edilen FlightModel doğruluğunu kontrol et
-        XCTAssertEqual(decodedFlightModel.time, 1609459200, "Time doğru olmalı")
-        XCTAssertEqual(decodedFlightModel.states?.count, 1, "States listesi doğru sayıda uçuş içermeli")
-        XCTAssertEqual(decodedFlightModel.states?.first?.icao24, "ABC123", "State'nin ICAO24 değeri doğru olmalı")
+        let flightModel = FlightModel(time: 1616161616, states: [state])
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted // JSON'u okunaklı hale getirmek için
+        
+        let jsonData = try encoder.encode(flightModel)
+        let jsonString = String(data: jsonData, encoding: .utf8)!
+        
+        XCTAssertTrue(jsonString.contains("\"time\" : 1616161616"))
+        XCTAssertTrue(jsonString.contains("\"icao24\" : \"abc123\""))
+        XCTAssertTrue(jsonString.contains("\"callSign\" : \"THY123\""))
+        XCTAssertTrue(jsonString.contains("\"originCountry\" : \"Turkey\""))
     }
 }
