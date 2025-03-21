@@ -1,8 +1,8 @@
 import Alamofire
 
-final class NetworkManager {
+class NetworkManager {
     
-    static let shared = NetworkManager()
+    static var shared = NetworkManager()
     
     // Generic method to handle all API requests
     func request<T: Decodable>(type: T.Type, url: String, method: HTTPMethod = .get, parameters: [String: Any]? = nil, completion: @escaping (Result<T, AFError>) -> Void) {

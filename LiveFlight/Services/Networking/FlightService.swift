@@ -12,6 +12,7 @@ final class FlightService {
                 completion(data)
             case .failure(let error):
                 debugPrint(error.localizedDescription)
+                completion(nil)
             }
         }
     }
