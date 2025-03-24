@@ -102,44 +102,7 @@ class MapKitManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         
     }
     
-    
-    func addFlightToFavorites(annotation: MKAnnotation) {
-        guard let title = annotation.title ?? "", let subtitle = annotation.subtitle ?? "" else {
-            print("Favorilere eklenemedi: Başlık veya alt başlık eksik.")
-            return
-        }
-        
-        // Yeni uçuş verisini oluştur
-        let flight = State(
-            icao24: flightsModel.first?.icao24,
-            callSign: title,
-            originCountry: subtitle,
-            timePosition: nil,
-            lastContact: nil,
-            longitude: annotation.coordinate.longitude,
-            latitude: annotation.coordinate.latitude,
-            baroAltitude: nil,
-            onGround: nil,
-            velocity: nil,
-            trueTrack: nil,
-            verticalRate: nil,
-            sensors: nil,
-            geoAltitude: nil,
-            squawk: nil,
-            spi: nil,
-            positionSource: nil
-        )
-        
-        // Favorilere ekleyelim
-        favoritesViewModel.addFlightToFavorites(flight)
-        
-        // ICAO24 kodunu favori listesine ekleyelim
-        //        favoriteFlights.insert(flightICAO24!)
-        //
-        //            print("Uçuş favorilere eklendi: \(flightICAO24)")
-    }
-    
-    
+
     /// **Konum İzni İsteme**
     func requestLocationPermission() {
         guard let locationManager = locationManager else {return}
