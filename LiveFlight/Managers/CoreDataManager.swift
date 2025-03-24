@@ -4,7 +4,7 @@ import UIKit
 class CoreDataManager {
     static let shared = CoreDataManager()
     
-    let persistentContainer: NSPersistentContainer
+    var persistentContainer: NSPersistentContainer
     
     init() {
         persistentContainer = NSPersistentContainer(name: "CoreData") // Data Model adını buraya yaz
