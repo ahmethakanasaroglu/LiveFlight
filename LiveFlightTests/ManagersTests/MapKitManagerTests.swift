@@ -93,7 +93,16 @@ class MapKitManagerTests: XCTestCase {
     }
     
     
-    
+    func testShowSettingsAlert() {
+        // Arrange
+        let alertController = UIAlertController(title: "Konum İzni Gerekli", message: "Uygulamanın konumunuzu kullanabilmesi için lütfen ayarlardan izin verin.", preferredStyle: .alert)
+        
+        // Act
+        mapKitManager.showSettingsAlert()
+        
+        // Assert
+        XCTAssertNotNil(alertController)
+    }
     
     func testStartUpdatingLocationWithPermissionGranted() {
         // Simulate location services enabled and permission granted
@@ -129,17 +138,6 @@ class MapKitManagerTests: XCTestCase {
         XCTAssertTrue(mockDelegate.didUpdateUserLocationCalled)
         XCTAssertEqual(mockDelegate.userLocation?.coordinate.latitude, 40.7128)
         XCTAssertEqual(mockDelegate.userLocation?.coordinate.longitude, -74.0060)
-    }
-    
-    func testShowSettingsAlert() {
-        // Arrange
-        let alertController = UIAlertController(title: "Konum İzni Gerekli", message: "Uygulamanın konumunuzu kullanabilmesi için lütfen ayarlardan izin verin.", preferredStyle: .alert)
-        
-        // Act
-        mapKitManager.showSettingsAlert()
-        
-        // Assert
-        XCTAssertNotNil(alertController)
     }
     
     
