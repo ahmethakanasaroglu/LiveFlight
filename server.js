@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Flight API Sunucusu Çalışıyor!');
 });
 
-app.get('/api/states/all', (req, res) => {
+app.get('/LiveFlight/api', (req, res) => {
   // Gerçekçi bir uçuş veri kümesi oluşturalım
   const flightData = {
   time: Math.floor(Date.now() / 1000),  // Şu anki Unix timestamp
@@ -105663,5 +105663,5 @@ app.get('/api/states/:icao24', (req, res) => {
 // Sunucuyu başlat
 app.listen(port, () => {
   console.log(`Flight API sunucusu http://localhost:${port} adresinde çalışıyor`);
-  console.log(`API endpoint: http://localhost:${port}/api/states/all`);
+  console.log(`API endpoint: http://localhost:${port}/LiveFlight/api`);
 });
