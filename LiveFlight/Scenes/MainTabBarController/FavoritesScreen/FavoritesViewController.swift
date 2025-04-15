@@ -1,21 +1,15 @@
-//
-//  FavoritesViewController.swift
-//  LiveFlight
-//
-//  Created by Ahmet Hakan Asaroğlu on 14.03.2025.
-//
-
 import UIKit
 
 class FavoritesViewController: UIViewController {
     
     private let tableView = UITableView()
     private let viewModel = FavoritesViewModel()
-    
+    private let emptyStateLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupEmptyStateLabel()
     }
     
     private func setupUI() {
@@ -40,11 +34,37 @@ class FavoritesViewController: UIViewController {
         ])
     }
     
+    private func setupEmptyStateLabel() {
+        emptyStateLabel.text = "Favori uçuşunuz bulunmamaktadır."
+        emptyStateLabel.textAlignment = .center
+        emptyStateLabel.textColor = .gray
+        emptyStateLabel.font = UIFont.systemFont(ofSize: 16)
+        emptyStateLabel.numberOfLines = 0
+        
+        view.addSubview(emptyStateLabel)
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyStateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+        
+        // Başlangıçta gizli olsun
+        emptyStateLabel.isHidden = true
+    }
+    
+    private func updateEmptyStateVisibility() {
+        // Favori uçuş yoksa mesajı göster, varsa gizle
+        emptyStateLabel.isHidden = !viewModel.favoriteFlights.isEmpty
+        tableView.isHidden = viewModel.favoriteFlights.isEmpty
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.loadFavorites() // güncellenmis favori ucuslarını ceker direkt
         tableView.reloadData()
+        updateEmptyStateVisibility()
     }
 }
 
@@ -70,6 +90,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
             let flight = self.viewModel.favoriteFlights[indexPath.row]
             self.viewModel.removeFlightFromFavorites(flight)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            self.updateEmptyStateVisibility() // Silme sonrası empty state kontrol et
             completion(true)
         }
         deleteAction.backgroundColor = .systemRed
@@ -77,7 +98,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
-    //  Uçuşa tıklayınca detay sayfasına gitme
+    // Uçuşa tıklayınca detay sayfasına gitme
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let flight = viewModel.favoriteFlights[indexPath.row]
