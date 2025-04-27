@@ -22,7 +22,7 @@ class HomeScreenViewModel: MapKitManagerDelegate {
         MapKitManager.shared.startUpdatingLocation()
         fetchFlightData()
         observeInternetConnection()
-        // startUpdatingFlightData()
+        startUpdatingFlightData()
     }
     
     private func observeInternetConnection() {
@@ -38,7 +38,7 @@ class HomeScreenViewModel: MapKitManagerDelegate {
         onInternetStatusChanged?(isConnected, statusText)
     }
     
-    func fetchFlightData() {
+    @objc func fetchFlightData() {
         FlightService.shared.flightRequest { [weak self] data in
             if let data = data {
                 print(data)
@@ -46,13 +46,14 @@ class HomeScreenViewModel: MapKitManagerDelegate {
             } else {
                 print("API'den Veri Alınamadı!")
             }
+            
         }
     }
     
-     // 5sn de bir servisi tetikliyor, sunum esnasında acılacak, daily-400 api request limit
-//    func startUpdatingFlightData() {
-//        timer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(fetchFlightData), userInfo: nil, repeats: true)
-//    }
+     //  10sn de bir servisi tetikliyor, sunum esnasında acılacak, daily-400 api request limit
+    func startUpdatingFlightData() {
+        timer = Timer.scheduledTimer(timeInterval: 10.0, target: self, selector: #selector(fetchFlightData), userInfo: nil, repeats: true)
+    }
 
     
     func stopUpdatingFlightData() {

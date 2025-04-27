@@ -7,7 +7,7 @@ class CoreDataManager {
     var persistentContainer: NSPersistentContainer
     
     init() {
-        persistentContainer = NSPersistentContainer(name: "CoreData") // Data Model adını buraya yaz
+        persistentContainer = NSPersistentContainer(name: "CoreData") 
         persistentContainer.loadPersistentStores { (_, error) in
             if let error = error {
                 print("Core Data yüklenirken hata oluştu: \(error.localizedDescription)")
